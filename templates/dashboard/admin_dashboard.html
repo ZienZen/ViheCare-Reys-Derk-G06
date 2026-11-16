@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+{% block title %}Admin dashboard · VehiCare{% endblock %}
+{% block content %}
+<h1>Admin dashboard</h1>
+<p class="lead">Registered accounts across VehiCare.</p>
+
+<div class="stats">
+  <div class="stat"><b>{{ total_users }}</b><span>Total users</span></div>
+  <div class="stat"><b>{{ owner_count }}</b><span>Vehicle Owners</span></div>
+  <div class="stat"><b>{{ admin_count }}</b><span>Admins</span></div>
+</div>
+
+<h2>Newest accounts</h2>
+<div class="table-scroll">
+  <table>
+    <thead><tr><th>Name</th><th>Username</th><th>Email</th><th>Role</th><th>Joined</th></tr></thead>
+    <tbody>
+      {% for p in recent_profiles %}
+      <tr>
+        <td>{{ p.full_name }}</td>
+        <td>{{ p.user.username }}</td>
+        <td>{{ p.user.email|default:"-" }}</td>
+        <td><span class="tag {% if p.is_admin %}admin{% endif %}">{{ p.get_role_display }}</span></td>
+        <td>{{ p.user.date_joined|date:"M j, Y" }}</td>
+      </tr>
+      {% empty %}
+      <tr><td colspan="5">No accounts yet.</td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+<p class="help">To change a user's role or deactivate an account, use the <a href="{% url 'admin:index' %}">Django admin</a>.</p>
+{% endblock %}

@@ -1,0 +1,90 @@
+{% extends 'base.html' %}
+{% block title %}VehiCare: track your vehicle maintenance easily{% endblock %}
+{% block body %}
+{% include '_topbar.html' %}
+<main>
+  <section class="hero">
+    <div>
+      <h1>Know when your next service is <em>due.</em></h1>
+      <p class="sub">VehiCare keeps every service record for your car or motorcycle in one place and reminds you before a missed oil change becomes a costly repair.</p>
+      <div class="actions">
+        <a class="btn" href="{% url 'accounts:register' %}">Create your account</a>
+        <a class="btn ghost" href="{% url 'accounts:login' %}">Log in</a>
+      </div>
+    </div>
+
+    <div class="gauge" role="img" aria-label="Example: a vehicle with 48,210 kilometres on the odometer and an oil change due in 180 kilometres">
+      <div class="label">Odometer</div>
+      <div class="odo" id="odo" data-value="48210">
+        <span>0</span><span>4</span><span>8</span><span>2</span><span>1</span><span>0</span>
+        <span class="unit">km</span>
+      </div>
+      <div class="row"><span>Last oil change</span><b>48,030 km</b></div>
+      <div class="bar"><i></i></div>
+      <div class="row"><span>Service interval</span><b>5,000 km</b></div>
+      <div class="due">Oil change due in 180 km<small>Time to book it before it turns overdue.</small></div>
+    </div>
+  </section>
+
+  <div class="band">
+    <section class="section">
+      <h2>Everything your vehicle needs, in one record.</h2>
+      <div class="tracks">
+        <div>
+          <h3>Your vehicles</h3>
+          <p>Save each car or motorcycle with its brand, model, year, and plate number.</p>
+        </div>
+        <div>
+          <h3>Service history</h3>
+          <p>Log every service with its date, odometer reading, and cost.</p>
+        </div>
+        <div>
+          <h3>Reminders</h3>
+          <p>Set the next due date. Anything past due is marked overdue.</p>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <div class="band">
+    <section class="section">
+      <h2>Up and running in three steps.</h2>
+      <ol class="steps">
+        <li><b>Create an account</b><span>Register with your email and a password. It takes under a minute.</span></li>
+        <li><b>Add your vehicle</b><span>Enter the basics once and your history lives under it.</span></li>
+        <li><b>Stay ahead of service</b><span>Check your dashboard for what is coming up and what is overdue.</span></li>
+      </ol>
+    </section>
+  </div>
+
+  <div class="closing">
+    <div class="section">
+      <h2>Stop relying on memory and a notebook.</h2>
+      <a class="btn" href="{% url 'accounts:register' %}">Create your account</a>
+    </div>
+  </div>
+</main>
+<footer class="foot">VehiCare, 2026</footer>
+
+<script>
+  // One-time odometer roll on load; skipped when the visitor prefers reduced motion.
+  (function () {
+    var odo = document.getElementById('odo');
+    if (!odo || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    var target = parseInt(odo.dataset.value, 10);
+    var digits = odo.querySelectorAll('span:not(.unit)');
+    var start = null, duration = 1400;
+    function show(n) {
+      var s = String(n).padStart(digits.length, '0');
+      digits.forEach(function (d, i) { d.textContent = s[i]; });
+    }
+    function tick(ts) {
+      if (start === null) start = ts;
+      var p = Math.min((ts - start) / duration, 1);
+      show(Math.round(target * (1 - Math.pow(1 - p, 3))));
+      if (p < 1) requestAnimationFrame(tick);
+    }
+    requestAnimationFrame(tick);
+  })();
+</script>
+{% endblock %}

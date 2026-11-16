@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+{% block title %}My profile · VehiCare{% endblock %}
+{% block content %}
+<div class="profile-head">
+  {% if profile.profile_photo %}
+    <img class="avatar" src="{{ profile.profile_photo.url }}" alt="Your profile photo">
+  {% else %}
+    <div class="avatar" aria-hidden="true">{{ profile.full_name|slice:":1"|upper }}</div>
+  {% endif %}
+  <div>
+    <h1>{{ profile.full_name }}</h1>
+    <span class="tag {% if profile.is_admin %}admin{% endif %}">{{ profile.get_role_display }}</span>
+  </div>
+</div>
+
+<dl class="facts">
+  <dt>Username</dt><dd>{{ user.username }}</dd>
+  <dt>Email</dt><dd>{{ user.email }}</dd>
+  <dt>Contact number</dt><dd>{{ profile.contact_number|default:"Not set" }}</dd>
+</dl>
+
+<h2 style="margin-top:2.25rem">Edit your details</h2>
+<form method="post" enctype="multipart/form-data" class="form-narrow" novalidate>
+  {% csrf_token %}
+  {% include 'accounts/_form_fields.html' %}
+  <button type="submit" class="btn">Save changes</button>
+</form>
+{% endblock %}

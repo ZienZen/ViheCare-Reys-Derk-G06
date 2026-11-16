@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+{% block title %}My dashboard · VehiCare{% endblock %}
+{% block content %}
+<h1>Hello, {{ profile.full_name }}</h1>
+<p class="lead">This is your Vehicle Owner dashboard.</p>
+
+<div class="stats">
+  <div class="stat"><b>{{ user.date_joined|date:"M Y" }}</b><span>Member since</span></div>
+  <div class="stat"><b>{{ profile.get_role_display }}</b><span>Account type</span></div>
+</div>
+
+<h2>Your account</h2>
+<dl class="facts">
+  <dt>Username</dt><dd>{{ user.username }}</dd>
+  <dt>Email</dt><dd>{{ user.email }}</dd>
+  <dt>Contact number</dt><dd>{{ profile.contact_number|default:"Not set" }}</dd>
+</dl>
+<p style="margin-top:1.5rem"><a class="btn" href="{% url 'accounts:profile' %}">Edit your profile</a></p>
+{% endblock %}

@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+{% block title %}Create account · VehiCare{% endblock %}
+{% block body %}
+<div class="auth">
+  <section class="auth-side">
+    <a class="brand" href="{% url 'landing' %}">Back to home</a>
+    <div>
+      <h1 class="big">Vehi<br>Care</h1>
+    <p>Create your account to start tracking your vehicle maintenance.</p>
+    </div>
+  </section>
+  <section class="auth-main">
+    <div class="auth-box">
+      {% include 'messages.html' %}
+      <h2>Create your account</h2>
+      <form method="post" novalidate>
+        {% csrf_token %}
+        {% include 'accounts/_form_fields.html' %}
+        <button type="submit" class="btn">Create account</button>
+      </form>
+      <p class="alt">Already registered? <a href="{% url 'accounts:login' %}">Log in</a></p>
+    </div>
+  </section>
+</div>
+{% endblock %}
