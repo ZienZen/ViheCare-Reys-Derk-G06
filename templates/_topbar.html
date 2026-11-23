@@ -8,9 +8,11 @@
     {% if user.is_authenticated %}
       {% if user.profile.role == 'ADMIN' %}
         <a href="{% url 'dashboard:admin' %}">Admin dashboard</a>
+        <a href="{% url 'vehicles:admin_list' %}">All vehicles</a>
         <a href="{% url 'admin:index' %}">Django admin</a>
       {% else %}
         <a href="{% url 'dashboard:owner' %}">My dashboard</a>
+        <a href="{% url 'vehicles:list' %}">My vehicles</a>
       {% endif %}
       <a href="{% url 'accounts:profile' %}">My profile</a>
       <form method="post" action="{% url 'accounts:logout' %}">

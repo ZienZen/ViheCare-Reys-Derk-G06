@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+{% block title %}All vehicles · VehiCare{% endblock %}
+{% block content %}
+<div class="page-head"><h1>All vehicles</h1></div>
+<p class="lead">A read-only overview of every vehicle saved by Vehicle Owners.</p>
+
+<form method="get" class="filters" role="search">
+  <input type="search" name="q" value="{{ q }}" placeholder="Search owner, brand, model, or plate" aria-label="Search vehicles">
+  <button type="submit" class="btn small">Search</button>
+  {% if q %}<a class="btn small ghost" href="{% url 'vehicles:admin_list' %}">Clear</a>{% endif %}
+</form>
+
+{% if vehicles %}
+<div class="table-scroll">
+  <table>
+    <thead><tr><th>Vehicle</th><th>Type</th><th>Year</th><th>Plate</th><th>Owner</th></tr></thead>
+    <tbody>
+      {% for v in vehicles %}
+      <tr>
+        <td><b>{{ v.brand }} {{ v.model }}</b></td>
+        <td><span class="tag">{{ v.get_vehicle_type_display }}</span></td>
+        <td>{{ v.year }}</td>
+        <td><span class="plate">{{ v.plate_number }}</span></td>
+        <td>{{ v.user.profile.full_name|default:v.user.username }} <span class="help">({{ v.user.username }})</span></td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+<p class="help">{{ vehicles|length }} vehicle{{ vehicles|length|pluralize }} shown.</p>
+{% else %}
+<div class="empty">
+  <h2>{% if q %}No matches{% else %}No vehicles saved yet{% endif %}</h2>
+  <p>{% if q %}Try a different search word.{% else %}Vehicles appear here once owners add them.{% endif %}</p>
+</div>
+{% endif %}
+{% endblock %}

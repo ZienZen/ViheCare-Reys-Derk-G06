@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+{% block title %}Delete vehicle · VehiCare{% endblock %}
+{% block content %}
+<div class="confirm">
+  <h1>Delete this vehicle?</h1>
+  <p class="lead" style="margin-bottom:1rem">
+    <b>{{ vehicle.year }} {{ vehicle.brand }} {{ vehicle.model }}</b>
+    <span class="plate">{{ vehicle.plate_number }}</span><br>
+    This permanently removes the vehicle and any records attached to it. This cannot be undone.
+  </p>
+  <form method="post" class="actions-row">
+    {% csrf_token %}
+    <button type="submit" class="btn danger">Yes, delete it</button>
+    <a class="btn ghost" href="{% url 'vehicles:detail' vehicle.pk %}">Cancel</a>
+  </form>
+</div>
+{% endblock %}

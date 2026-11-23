@@ -4,6 +4,7 @@ from django.shortcuts import redirect, render
 
 from accounts.decorators import role_required
 from accounts.models import UserProfile, ensure_profile
+from vehicles.models import Vehicle
 
 User = get_user_model()
 
@@ -24,13 +25,20 @@ def admin_dashboard(request):
         'owner_count': profiles.filter(role=UserProfile.Role.VEHICLE_OWNER).count(),
         'admin_count': profiles.filter(role=UserProfile.Role.ADMIN).count(),
         'recent_profiles': profiles[:10],
+        'vehicle_count': Vehicle.objects.count(),
     }
     return render(request, 'dashboard/admin_dashboard.html', context)
 
 
 @role_required(UserProfile.Role.VEHICLE_OWNER)
 def owner_dashboard(request):
-    return render(request, 'dashboard/owner_dashboard.html', {'profile': request.user.profile})
+    vehicles = Vehicle.objects.filter(user=request.user)
+    context = {
+        'profile': request.user.profile,
+        'vehicle_count': vehicles.count(),
+        'recent_vehicles': vehicles.order_by('-created_at')[:5],
+    }
+    return render(request, 'dashboard/owner_dashboard.html', context)
 
 
 def landing(request):
