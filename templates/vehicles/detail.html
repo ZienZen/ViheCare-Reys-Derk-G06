@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+{% block title %}{{ vehicle.brand }} {{ vehicle.model }} · VehiCare{% endblock %}
+{% block content %}
+<div class="page-head">
+  <div>
+    <h1>{{ vehicle.brand }} {{ vehicle.model }}</h1>
+    <span class="tag">{{ vehicle.get_vehicle_type_display }}</span>
+  </div>
+  <div class="actions-row">
+    <a class="btn" href="{% url 'vehicles:edit' vehicle.pk %}">Edit</a>
+    <a class="btn ghost danger-ghost" href="{% url 'vehicles:delete' vehicle.pk %}">Delete</a>
+  </div>
+</div>
+
+<dl class="facts">
+  <dt>Brand</dt><dd>{{ vehicle.brand }}</dd>
+  <dt>Model</dt><dd>{{ vehicle.model }}</dd>
+  <dt>Year</dt><dd>{{ vehicle.year }}</dd>
+  <dt>Plate number</dt><dd><span class="plate">{{ vehicle.plate_number }}</span></dd>
+  <dt>Added</dt><dd>{{ vehicle.created_at|date:"M j, Y" }}</dd>
+  <dt>Last updated</dt><dd>{{ vehicle.updated_at|date:"M j, Y g:i A" }}</dd>
+</dl>
+
+<p style="margin-top:2rem"><a href="{% url 'vehicles:list' %}">Back to my vehicles</a></p>
+{% endblock %}
