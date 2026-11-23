@@ -7,6 +7,7 @@ Full-stack Django app (templates frontend) with PostgreSQL on Supabase.
 - Login / logout with clear messages; `@login_required` protection
 - Role-based dashboards (Admin and Vehicle Owner); users cannot open the other role's dashboard by URL
 - User profile (view and edit own name, email, contact number, photo)
+- **Core feature: Vehicle Management.** Vehicle Owners add, view, search, edit, and delete their own cars and motorcycles (stored in PostgreSQL/Supabase, each linked to its owner by ForeignKey). Admins get a read-only overview of all vehicles.
 - Public landing page and black-and-gold themed interface (Django templates)
 
 ## Setup (Windows PowerShell)
