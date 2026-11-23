@@ -9,6 +9,7 @@ urlpatterns = [
     path('accounts/', include('accounts.urls')),
     path('dashboard/', include('dashboard.urls')),
     path('vehicles/', include('vehicles.urls')),
+    path('maintenance/', include('maintenance.urls')),
     path('', dashboard_views.landing, name='landing'),
 ]
 

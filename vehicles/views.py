@@ -62,7 +62,9 @@ def vehicle_create(request):
 
 @role_required(OWNER)
 def vehicle_detail(request, pk):
-    return render(request, 'vehicles/detail.html', {'vehicle': _own_vehicle(request, pk)})
+    vehicle = _own_vehicle(request, pk)
+    records = vehicle.maintenance_records.select_related('maintenance_type', 'reminder')[:8]
+    return render(request, 'vehicles/detail.html', {'vehicle': vehicle, 'records': records})
 
 
 @role_required(OWNER)
@@ -97,7 +99,8 @@ def vehicle_delete(request, pk):
         vehicle.delete()
         messages.success(request, f'{label} was deleted.')
         return redirect('vehicles:list')
-    return render(request, 'vehicles/confirm_delete.html', {'vehicle': vehicle})
+    context = {'vehicle': vehicle, 'record_count': vehicle.maintenance_records.count()}
+    return render(request, 'vehicles/confirm_delete.html', context)
 
 
 @role_required(ADMIN)

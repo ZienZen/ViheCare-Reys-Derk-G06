@@ -15,9 +15,11 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django.contrib.humanize',
     'accounts',
     'dashboard',
     'vehicles',
+    'maintenance',
 ]
 
 MIDDLEWARE = [
@@ -42,6 +44,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'maintenance.context_processors.reminder_badge',
             ],
         },
     },
