@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+{% block title %}Delete maintenance record · VehiCare{% endblock %}
+{% block content %}
+<div class="confirm">
+  <h1>Delete this maintenance record?</h1>
+  <p class="lead">
+    <b>{{ record.maintenance_type }}</b> for {{ record.vehicle.brand }} {{ record.vehicle.model }} on {{ record.service_date|date:"M j, Y" }}.<br>
+    Its linked reminder will also be removed.
+  </p>
+  <form method="post" class="actions-row">
+    {% csrf_token %}
+    <button type="submit" class="btn danger">Yes, delete record</button>
+    <a class="btn ghost" href="{% url 'maintenance:detail' record.pk %}">Cancel</a>
+  </form>
+</div>
+{% endblock %}

@@ -1,0 +1,53 @@
+{% extends 'base.html' %}
+{% block title %}Reminders · VehiCare{% endblock %}
+{% block content %}
+<div class="page-head"><h1>Maintenance reminders</h1></div>
+
+<h2>Pending</h2>
+{% if pending %}
+<div class="table-scroll">
+  <table>
+    <thead><tr><th>Vehicle</th><th>Service</th><th>Due date</th><th>Status</th><th>Action</th></tr></thead>
+    <tbody>
+      {% for reminder in pending %}
+      <tr>
+        <td>{{ reminder.vehicle.brand }} {{ reminder.vehicle.model }}</td>
+        <td>{{ reminder.maintenance_type }}</td>
+        <td>{{ reminder.due_date|date:"M j, Y" }}</td>
+        <td><span class="tag">{{ reminder.state_label }}</span></td>
+        <td>
+          <form method="post" action="{% url 'maintenance:reminder_done' reminder.pk %}">
+            {% csrf_token %}
+            <input type="hidden" name="next" value="{{ request.path }}">
+            <button type="submit" class="btn small ghost">Mark done</button>
+          </form>
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% else %}
+<p class="lead">There are no pending reminders.</p>
+{% endif %}
+
+<h2 style="margin-top:2rem">Completed</h2>
+{% if done %}
+<div class="table-scroll">
+  <table>
+    <thead><tr><th>Vehicle</th><th>Service</th><th>Due date</th></tr></thead>
+    <tbody>
+      {% for reminder in done %}
+      <tr>
+        <td>{{ reminder.vehicle.brand }} {{ reminder.vehicle.model }}</td>
+        <td>{{ reminder.maintenance_type }}</td>
+        <td>{{ reminder.due_date|date:"M j, Y" }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% else %}
+<p class="lead">No completed reminders.</p>
+{% endif %}
+{% endblock %}

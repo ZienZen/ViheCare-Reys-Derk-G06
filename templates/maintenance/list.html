@@ -1,0 +1,56 @@
+{% extends 'base.html' %}
+{% block title %}Maintenance · VehiCare{% endblock %}
+{% block content %}
+<div class="page-head">
+  <h1>Maintenance records</h1>
+  <a class="btn" href="{% url 'maintenance:add' %}">Log maintenance</a>
+</div>
+
+<form method="get" class="filters" role="search">
+  <select name="vehicle" aria-label="Filter by vehicle">
+    <option value="">All vehicles</option>
+    {% for vehicle in vehicles %}
+      <option value="{{ vehicle.pk }}" {% if vehicle_id == vehicle.pk|stringformat:'s' %}selected{% endif %}>{{ vehicle.brand }} {{ vehicle.model }} ({{ vehicle.plate_number }})</option>
+    {% endfor %}
+  </select>
+  <select name="type" aria-label="Filter by maintenance type">
+    <option value="">All maintenance types</option>
+    {% for maintenance_type in types %}
+      <option value="{{ maintenance_type.pk }}" {% if type_id == maintenance_type.pk|stringformat:'s' %}selected{% endif %}>{{ maintenance_type.type_name }}</option>
+    {% endfor %}
+  </select>
+  <button type="submit" class="btn small">Filter</button>
+  {% if vehicle_id or type_id %}<a class="btn small ghost" href="{% url 'maintenance:list' %}">Clear</a>{% endif %}
+</form>
+
+{% if records %}
+<div class="table-scroll">
+  <table>
+    <thead><tr><th>Vehicle</th><th>Service</th><th>Date</th><th>Odometer</th><th>Cost</th><th>Actions</th></tr></thead>
+    <tbody>
+      {% for record in records %}
+      <tr>
+        <td><a href="{% url 'vehicles:detail' record.vehicle.pk %}">{{ record.vehicle.brand }} {{ record.vehicle.model }}</a></td>
+        <td>{{ record.maintenance_type }}</td>
+        <td>{{ record.service_date|date:"M j, Y" }}</td>
+        <td>{{ record.odometer_km }} km</td>
+        <td>{% if record.cost != None %}{{ record.cost }}{% else %}-{% endif %}</td>
+        <td class="row-actions">
+          <a href="{% url 'maintenance:detail' record.pk %}">View</a>
+          <a href="{% url 'maintenance:edit' record.pk %}">Edit</a>
+          <a class="del" href="{% url 'maintenance:delete' record.pk %}">Delete</a>
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+<p class="help">{{ total }} record{{ total|pluralize }} saved.</p>
+{% else %}
+<div class="empty">
+  <h2>No maintenance records</h2>
+  <p>Log a service for one of your vehicles.</p>
+  <a class="btn" href="{% url 'maintenance:add' %}">Log maintenance</a>
+</div>
+{% endif %}
+{% endblock %}

@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+{% block title %}All maintenance · VehiCare{% endblock %}
+{% block content %}
+<div class="page-head"><h1>All maintenance records</h1></div>
+<p class="lead">A read-only overview of maintenance and reminders across all owners.</p>
+
+<form method="get" class="filters" role="search">
+  <input type="search" name="q" value="{{ q }}" placeholder="Search owner, vehicle, plate, or type" aria-label="Search maintenance">
+  <button type="submit" class="btn small">Search</button>
+  {% if q %}<a class="btn small ghost" href="{% url 'maintenance:admin_list' %}">Clear</a>{% endif %}
+</form>
+
+{% if records %}
+<div class="table-scroll">
+  <table>
+    <thead><tr><th>Owner</th><th>Vehicle</th><th>Service</th><th>Date</th><th>Reminder</th></tr></thead>
+    <tbody>
+      {% for record in records %}
+      <tr>
+        <td>{{ record.vehicle.user.profile.full_name|default:record.vehicle.user.username }}</td>
+        <td>{{ record.vehicle.brand }} {{ record.vehicle.model }} ({{ record.vehicle.plate_number }})</td>
+        <td>{{ record.maintenance_type }}</td>
+        <td>{{ record.service_date|date:"M j, Y" }}</td>
+        <td>{% if record.reminder %}{{ record.reminder.due_date|date:"M j, Y" }}{% else %}-{% endif %}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% else %}
+<div class="empty">
+  <h2>{% if q %}No matches{% else %}No maintenance records{% endif %}</h2>
+</div>
+{% endif %}
+{% endblock %}

@@ -6,8 +6,81 @@
 
 <div class="stats">
   <div class="stat"><b>{{ user.date_joined|date:"M Y" }}</b><span>Member since</span></div>
+  <div class="stat"><b>{{ vehicle_count }}</b><span>My vehicles</span></div>
+  <div class="stat"><b>{{ maintenance_count }}</b><span>Maintenance records</span></div>
+  <div class="stat"><b>{{ reminder_count }}</b><span>Reminders needing attention</span></div>
   <div class="stat"><b>{{ profile.get_role_display }}</b><span>Account type</span></div>
 </div>
+
+<div class="actions-row" style="margin-bottom:2rem">
+  <a class="btn" href="{% url 'vehicles:add' %}">Add a vehicle</a>
+  <a class="btn ghost" href="{% url 'vehicles:list' %}">View my vehicles</a>
+  <a class="btn ghost" href="{% url 'maintenance:add' %}">Log maintenance</a>
+  <a class="btn ghost" href="{% url 'maintenance:reminders' %}">View reminders</a>
+</div>
+
+<h2>Recent vehicles</h2>
+{% if recent_vehicles %}
+  <div class="table-scroll">
+    <table>
+      <thead><tr><th>Vehicle</th><th>Type</th><th>Year</th><th>Plate</th></tr></thead>
+      <tbody>
+        {% for vehicle in recent_vehicles %}
+        <tr>
+          <td><a href="{% url 'vehicles:detail' vehicle.pk %}"><b>{{ vehicle.brand }} {{ vehicle.model }}</b></a></td>
+          <td><span class="tag">{{ vehicle.get_vehicle_type_display }}</span></td>
+          <td>{{ vehicle.year }}</td>
+          <td><span class="plate">{{ vehicle.plate_number }}</span></td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+{% else %}
+  <div class="empty">
+    <h2>No vehicles yet</h2>
+    <p>Add your car or motorcycle to start keeping track of it.</p>
+  </div>
+{% endif %}
+
+<h2>Recent maintenance</h2>
+{% if recent_records %}
+  <div class="table-scroll">
+    <table>
+      <thead><tr><th>Vehicle</th><th>Service</th><th>Date</th><th>Odometer</th></tr></thead>
+      <tbody>
+        {% for record in recent_records %}
+        <tr>
+          <td><a href="{% url 'maintenance:detail' record.pk %}">{{ record.vehicle.brand }} {{ record.vehicle.model }}</a></td>
+          <td>{{ record.maintenance_type }}</td>
+          <td>{{ record.service_date|date:"M j, Y" }}</td>
+          <td>{{ record.odometer_km }} km</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+{% else %}
+  <p class="lead">No maintenance records yet. Log your vehicle's first service.</p>
+{% endif %}
+
+{% if recent_reminders %}
+<h2>Reminders needing attention</h2>
+<div class="table-scroll">
+  <table>
+    <thead><tr><th>Vehicle</th><th>Service</th><th>Due</th></tr></thead>
+    <tbody>
+      {% for reminder in recent_reminders %}
+      <tr>
+        <td>{{ reminder.vehicle.brand }} {{ reminder.vehicle.model }}</td>
+        <td>{{ reminder.maintenance_type }}</td>
+        <td><span class="tag">{{ reminder.due_date|date:"M j, Y" }}</span></td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endif %}
 
 <h2>Your account</h2>
 <dl class="facts">

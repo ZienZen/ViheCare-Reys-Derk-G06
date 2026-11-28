@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+{% block title %}Maintenance record · VehiCare{% endblock %}
+{% block content %}
+<div class="page-head">
+  <div>
+    <h1>{{ record.maintenance_type }}</h1>
+    <span class="tag">{{ record.vehicle.brand }} {{ record.vehicle.model }}</span>
+  </div>
+  <div class="actions-row">
+    <a class="btn" href="{% url 'maintenance:edit' record.pk %}">Edit</a>
+    <a class="btn ghost danger-ghost" href="{% url 'maintenance:delete' record.pk %}">Delete</a>
+  </div>
+</div>
+
+<dl class="facts">
+  <dt>Vehicle</dt><dd>{{ record.vehicle.year }} {{ record.vehicle.brand }} {{ record.vehicle.model }} ({{ record.vehicle.plate_number }})</dd>
+  <dt>Service date</dt><dd>{{ record.service_date|date:"M j, Y" }}</dd>
+  <dt>Odometer</dt><dd>{{ record.odometer_km }} km</dd>
+  <dt>Cost</dt><dd>{% if record.cost != None %}{{ record.cost }}{% else %}Not recorded{% endif %}</dd>
+  <dt>Notes</dt><dd>{{ record.notes|default:"None" }}</dd>
+  <dt>Reminder</dt>
+  <dd>{% if reminder %}{{ reminder.due_date|date:"M j, Y" }} ({{ reminder.state_label }}){% else %}No reminder{% endif %}</dd>
+</dl>
+
+<p style="margin-top:2rem"><a href="{% url 'maintenance:list' %}">Back to maintenance records</a></p>
+{% endblock %}

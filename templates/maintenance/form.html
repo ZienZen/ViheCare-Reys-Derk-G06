@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+{% block title %}{{ heading }} · VehiCare{% endblock %}
+{% block content %}
+<div class="page-head"><h1>{{ heading }}</h1></div>
+<form method="post" class="form-narrow" novalidate>
+  {% csrf_token %}
+  {% include 'accounts/_form_fields.html' %}
+  <div class="actions-row">
+    <button type="submit" class="btn">{{ submit }}</button>
+    <a class="btn ghost" href="{% if record %}{% url 'maintenance:detail' record.pk %}{% else %}{% url 'maintenance:list' %}{% endif %}">Cancel</a>
+  </div>
+</form>
+{% endblock %}
